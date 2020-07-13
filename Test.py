@@ -4,7 +4,7 @@ import time
 from tqdm import trange
 import numpy as np
 
-EYE = True
+EYE = False
 
 if EYE:
     from gym.envs.classic_control import rendering
