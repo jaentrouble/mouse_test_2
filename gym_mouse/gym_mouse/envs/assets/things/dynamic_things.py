@@ -93,6 +93,13 @@ class Mouse(Base):
         """
         return self._center.copy()
 
+    @property
+    def nose(self):
+        """
+        return nose position
+        """
+        return self._nose_pos.copy()
+
     def ate_apple(self):
         return self._ate_apple
 

@@ -222,7 +222,7 @@ class Engine():
         """
         reward = mouse_reward
         new_dist = np.sqrt(np.sum(np.subtract(self.The_apple.pos,
-                                              self.The_mouse.pos)**2))
+                                              self.The_mouse.nose)**2))
         # If mouse gets farther away from the apple, punish
         if new_dist > self._a_m_dist:
             reward += R.get_away_from_apple

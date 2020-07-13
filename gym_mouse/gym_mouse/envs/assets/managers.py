@@ -130,6 +130,8 @@ class CollisionManager():
                 np.any(updated_idx[1] >= self._size[1]-1) or\
                 np.any(np.array(updated_idx) <= 0):
                 self._TM.id_(ID).hit_wall()
+                # If hit wall, reset the game
+                done = True
                 updated_idx = self._TM.id_(ID).indices
 
             # Check collision
