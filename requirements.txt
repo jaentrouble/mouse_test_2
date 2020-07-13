@@ -1,0 +1,6 @@
+# Install tensorflow seperately
+
+gym
+scikit-image
+opencv-python
+tqdm

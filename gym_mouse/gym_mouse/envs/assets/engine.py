@@ -5,9 +5,9 @@ from .things.dynamic_things import Mouse
 from .things.things_consts import DefaultSize as ds
 from ..constants import colors, rng
 from ..constants import rewards as R
+from ..constants import engine_const as ec
 
-RAY_NUM = 100
-CACHE_NUM = 3
+
 
 #**** When drawing things on a grid or an image, do it in the order of id.
 #       This is to get consistent across engine and collision manager.
@@ -69,8 +69,11 @@ class Engine():
         for color, idx in self._TM.all_color:
             self._image[idx[0],idx[1]] = color
         lt_obs, rt_obs = self.observe()
-        self._obs_lt_cache = [lt_obs,lt_obs,lt_obs]
-        self._obs_rt_cache = [rt_obs,rt_obs,rt_obs]
+        self._obs_lt_cache = []
+        self._obs_rt_cache = []
+        for _ in range(ec.CacheNum):
+            self._obs_lt_cache.append(lt_obs)
+            self._obs_rt_cache.append(rt_obs)
 
     def update(self, action):
         """
@@ -97,6 +100,7 @@ class Engine():
                             dtype=np.uint8).swapaxes(0,1),
                         'Left':np.array(self._obs_lt_cache,
                             dtype=np.uint8).swapaxes(0,1)}
+        # Last axis has RGB values
         return observation, reward, done, info
 
     def observe(self):
@@ -109,15 +113,15 @@ class Engine():
                                                 np.sin(theta+beta)]))[:,np.newaxis]
         rt_eye = np.round(rt_eye + 1.5* np.array([np.cos(theta-beta),
                                                 np.sin(theta-beta)]))[:,np.newaxis]
-        fp_ray = np.stack((np.broadcast_to(lt_eye,(2,RAY_NUM)),
-                        np.broadcast_to(rt_eye,(2,RAY_NUM))), axis=0)
+        fp_ray = np.stack((np.broadcast_to(lt_eye,(2,ec.RayNum)),
+                        np.broadcast_to(rt_eye,(2,ec.RayNum))), axis=0)
         ray = np.empty_like(fp_ray, dtype=np.int)
-        lt_angles = np.linspace(theta+beta+np.pi/2, theta+beta-np.pi/2,num=RAY_NUM)
-        rt_angles = np.linspace(theta-beta-np.pi/2, theta-beta+np.pi/2,num=RAY_NUM)
+        lt_angles = np.linspace(theta+beta+np.pi/2, theta+beta-np.pi/2,num=ec.RayNum)
+        rt_angles = np.linspace(theta-beta-np.pi/2, theta-beta+np.pi/2,num=ec.RayNum)
 
         delta_vec = np.stack((np.cos(lt_angles),np.sin(lt_angles),
                               np.cos(rt_angles),np.sin(rt_angles)), axis=0)*2
-        delta_vec.resize(2,2,RAY_NUM)
+        delta_vec.resize(2,2,ec.RayNum)
         
         while np.any(delta_vec) :
             # Floating point ray that keeps track of rays

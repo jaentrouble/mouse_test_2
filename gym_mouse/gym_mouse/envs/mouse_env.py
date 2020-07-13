@@ -3,6 +3,7 @@ from gym.spaces import Discrete, Dict, Box
 from gym.utils import seeding
 from .assets.engine import Engine
 from .constants import rng
+from .constants import engine_const as ec
 import numpy as np
 
 class MouseEnv(gym.Env) :
@@ -15,15 +16,15 @@ class MouseEnv(gym.Env) :
         self._done = False
         self.viewer = None
         self.engine = None
-        self.max_step = 1000
+        self.max_step = 100
         self.cur_step = 0
         self.image_size = (720,720)
         self.seed()
 
         # 3 Continuous Inputs from both eyes
         self.observation_space = Dict(
-            {'Right' : Box(0, 255, shape=(100,3,3), dtype=np.uint8),
-             'Left' : Box(0,255, shape=(100,3,3), dtype = np.uint8)}
+            {'Right' : Box(0, 255, shape=(100,ec.CacheNum,3), dtype=np.uint8),
+             'Left' : Box(0,255, shape=(100,ec.CacheNum,3), dtype = np.uint8)}
         )
         
 
