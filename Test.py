@@ -33,6 +33,6 @@ for _ in trange(100):
         env.reset()
 # env.render()
     # env.render()
-# print(diff)
+print(diff)
 # input('done:')
 print(time.time() - st)
