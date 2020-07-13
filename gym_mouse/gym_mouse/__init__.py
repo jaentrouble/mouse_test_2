@@ -4,6 +4,11 @@ register(
     id='mouse-v0',
     entry_point='gym_mouse.envs:MouseEnv'
 )
+register(
+    id='mouseCl-v0',
+    entry_point='gym_mouse.envs:MouseEnv_cl'
+)
+
 # Abort voxel
 # register(
 #     id='mousevox-v0',
