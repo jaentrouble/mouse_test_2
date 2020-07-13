@@ -37,8 +37,10 @@ class Engine():
         self.ctx = cl.Context([self.device])
         self.queue = cl.CommandQueue(self.ctx)
         self.bg_color = np.array(colors.COLOR_BACKGROUND, dtype=np.uint8)
+        self.wall_color = np.array(colors.COLOR_WALL, dtype=np.uint8)
         self.image_dev = cl_array.empty(self.queue,self.image.shape,np.uint8)
         self.bg_col_dev = cl_array.to_device(self.queue, self.bg_color)
+        self.wall_col_dev = cl_array.to_device(self.queue, self.wall_color)
         self.fp_ray_dev = None
         self.delta_vec_dev = None
         self.observation_dev = cl_array.empty(self.queue,(2,ec.RayNum,3),np.uint8)
@@ -154,7 +156,9 @@ class Engine():
             np.int32(self.size[0]),
             np.int32(self.size[1]),
             np.int32(ec.RayNum),
+            np.int32(ec.LightRatio),
             self.bg_col_dev.data,
+            self.wall_col_dev.data,
             self.fp_ray_dev.data,
             self.delta_vec_dev.data,
             self.observation_dev.data

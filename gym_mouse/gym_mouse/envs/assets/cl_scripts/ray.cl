@@ -1,6 +1,7 @@
 __kernel void ray(
     __global const uchar *image,
-    int img_x, int img_y, int ray_num, __global const uchar *bg_col,
+    int img_x, int img_y, int ray_num, int light_ratio,
+    __global const uchar *bg_col, __global const uchar *wall_col,
     __global const float *fp_ray, __global const float *delta_vec,
     __global uchar *observation
 )
@@ -17,11 +18,13 @@ __kernel void ray(
 
     int2 newpos;
     int conv_pos;
-    uchar3 my_color = (uchar3) (bg_col[0], bg_col[1], bg_col[2]);
+    uchar3 my_color = (uchar3) (wall_col[0], wall_col[1], wall_col[2]);
 
     bool loop = true;
+    int dist = 0;
 
     while (loop) {
+        dist ++;
         fp_pos += delta;
         if (fp_pos.x >= (img_x - 1)) {
             fp_pos.x = img_x - 1;
@@ -49,7 +52,8 @@ __kernel void ray(
                 loop = false;
             }
     }
-    observation[eye*ray_num*3+ray_idx*3] = my_color.x;
-    observation[eye*ray_num*3+ray_idx*3+1] = my_color.y;
-    observation[eye*ray_num*3+ray_idx*3+2] = my_color.z;
+
+    observation[eye*ray_num*3+ray_idx*3] = my_color.x/(dist/light_ratio +1);
+    observation[eye*ray_num*3+ray_idx*3+1] = my_color.y/(dist/light_ratio +1);
+    observation[eye*ray_num*3+ray_idx*3+2] = my_color.z/(dist/light_ratio +1);
 }
