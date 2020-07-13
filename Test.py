@@ -11,4 +11,6 @@ for _ in trange(1000):
     _, _, d, i = env.step(env.action_space.sample())
     if d :
         env.reset()
+# env.render()
+input('done:')
 print(time.time() - st)

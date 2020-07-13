@@ -3,4 +3,7 @@ Max step 100
 env.seed(2)
 
 # Original
-41.20 seconds
+41.58 seconds
+
+# Voxel
+>60 seconds -> Abort
