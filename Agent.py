@@ -200,7 +200,7 @@ class Player():
             if not self.buffer_full:
                 batch_indices = random.sample(range(self.buffer_count),
                                               hp.Batch_size)
-                if self.buffer_count >= hp.Buffer_size:
+                if self.buffer_count >= hp.Buffer_size-1:
                     self.buffer_full = True
             else:
                 batch_indices = random.sample(range(hp.Buffer_size),
