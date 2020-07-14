@@ -131,7 +131,8 @@ class CollisionManager():
                 np.any(np.array(updated_idx) <= 0):
                 self._TM.id_(ID).hit_wall()
                 # If hit wall, reset the game
-                done = True
+                if ID == mouse_ID :
+                    done = True
                 updated_idx = self._TM.id_(ID).indices
 
             # Check collision
