@@ -9,6 +9,11 @@ import random
 import cv2
 import numpy as np
 
+#leave memory space for opencl
+gpus=tf.config.experimental.list_physical_devices('GPU')
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu,True)
+
 keras.backend.clear_session()
 policy = mixed_precision.Policy('mixed_float16')
 mixed_precision.set_policy(policy)
