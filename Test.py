@@ -17,8 +17,8 @@ parser.add_argument('--loop', dest='total_loop',default=20)
 parser.add_argument('--curloop', dest='cur_loop',default=0)
 parser.add_argument('--logname', dest='log_name',default=False)
 parser.add_argument('--curround', dest='cur_r',default=0)
-parser.add_argument('-bf', dest='buf_full',default='False')
-parser.add_argument('-lb', dest='load_buffer',default=False)
+parser.add_argument('-bf', dest='buf_full',action='store_true',default=False)
+parser.add_argument('-lb', dest='load_buffer',action='store_true',default=False)
 parser.add_argument('-bc', dest='buf_count', default=0)
 args = parser.parse_args()
 
@@ -27,11 +27,8 @@ total_steps = int(args.total_steps)
 total_loop = int(args.total_loop)
 cur_loop = int(args.cur_loop)
 cur_r = int(args.cur_r)
-if 'True' in args.buf_full:
-    buf_full = True
-elif 'False' in args.buf_full:
-    buf_full = False
-load_buffer = bool(args.load_buffer)
+buf_full = args.buf_full
+load_buffer = args.load_buffer
 buf_count = int(args.buf_count)
 
 print('starting loop, {} loops left'.format(total_loop))
@@ -90,10 +87,9 @@ else :
     next_args.append(player.log_name)
     next_args.append('--curround')
     next_args.append(str(player.rounds))
-    next_args.append('-bf')
-    next_args.append(str(player.buffer_full))
+    if player.buffer_full:
+        next_args.append('-bf')
     next_args.append('-lb')
-    next_args.append('True')
     next_args.append('-bc')
     next_args.append(str(player.buffer_count))
     
