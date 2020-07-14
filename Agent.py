@@ -26,6 +26,13 @@ class Player():
         model : The actual training model
         t_model : Fixed target model
         """
+        print('Model directory : {}'.format(m_dir))
+        print('Log name : {}'.format(log_name))
+        print('Starting from step {}'.format(start_step))
+        print('Starting from round {}'.format(start_round))
+        print('Buffer full? {}'.format(buf_full))
+        print('Load buffer? {}'.format(load_buffer))
+        print('Current buffer count : {}'.format(buf_count))
         self.action_n = action_space.n
         #Inputs
         if m_dir is None :
@@ -57,11 +64,13 @@ class Player():
 
         # Buffers
         if load_buffer:
+            print('loading buffers...')
             buffers = np.load(path.join(m_dir,'buffer.npz'))
             self.right_buffer = buffers['Right']
             self.left_buffer = buffers['Left']
             self.target_buffer = buffers['Target']
             buffers.close()
+            print('loaded')
         else :
             self.right_buffer = np.zeros(np.concatenate(([hp.Buffer_size],
                                 observation_space['Right'].shape)))
@@ -77,6 +86,7 @@ class Player():
         self.file_writer = tf.summary.create_file_writer(path.join('log',
                                                          self.log_name))
         self.file_writer.set_as_default()
+        print('Writing logs at '+ self.log_name)
 
         # Scalars
         self.start_training = False
